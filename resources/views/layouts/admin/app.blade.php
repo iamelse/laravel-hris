@@ -63,7 +63,7 @@
 
       <!-- ===== Page Wrapper Start ===== -->
       <div class="flex h-screen overflow-hidden">
-         @include('partials.sidebar')
+         @include('partials.admin.sidebar')
          <!-- ===== Content Area Start ===== -->
          <div
             class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto"
@@ -75,7 +75,7 @@
                class="fixed w-full h-screen z-9 bg-gray-900/50"
                ></div>
             <!-- Small Device Overlay End -->
-            @include('partials.header')
+            @include('partials.admin.header')
 
             <!-- Page content -->
             @yield('content')

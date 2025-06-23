@@ -24,7 +24,7 @@ class UserProfileController extends Controller
     {
         $user = Auth::user();
 
-        return view('pages.profile.edit', [
+        return view('pages.admin.profile.edit', [
             'title' => 'Profile | ' .  Auth::user()->name,
             'user' => $user
         ]);

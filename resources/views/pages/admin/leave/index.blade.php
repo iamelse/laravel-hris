@@ -2,7 +2,7 @@
     use App\Enums\PermissionEnum;
 @endphp
 
-@extends('layouts.app')
+@extends('layouts.admin.app')
 
 @section('content')
 <!-- ===== Main Content Start ===== -->

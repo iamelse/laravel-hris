@@ -41,7 +41,7 @@ class UserController extends Controller
             )
             ->paginate($request->query('limit') ?? 10);
 
-        return view('pages.user.index', [
+        return view('pages.admin.user.index', [
             'title' => 'User',
             'roles' => $roles,
             'users' => $users,
@@ -58,7 +58,7 @@ class UserController extends Controller
     {
         $roles = Role::orderBy('name', 'ASC')->get();
 
-        return view('pages.user.create', [
+        return view('pages.admin.user.create', [
             'title' => 'New User',
             'roles' => $roles
         ]);
@@ -104,7 +104,7 @@ class UserController extends Controller
     {
         $roles = Role::orderBy('name', 'ASC')->get();
 
-        return view('pages.user.edit', [
+        return view('pages.admin.user.edit', [
             'title' => 'Edit User | ' . $user->name,
             'roles' => $roles,
             'user' => $user
