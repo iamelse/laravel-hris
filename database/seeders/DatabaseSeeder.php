@@ -14,11 +14,11 @@ class DatabaseSeeder extends Seeder
         foreach (RoleEnum::cases() as $roleEnum) {
             Role::firstOrCreate([
                 'name' => $roleEnum->value,
-                'guard_name' => 'web', // ⬅️ pastikan guard-nya cocok
+                'guard_name' => 'web',
             ]);
         }
 
-        // 2. Create an admin user and assign ADMIN role
+        // 2. Create an admin user
         $admin = User::factory()->create([
             'name' => 'Admin User',
             'username' => 'admin',
@@ -27,15 +27,21 @@ class DatabaseSeeder extends Seeder
         ]);
         $admin->assignRole(RoleEnum::ADMIN->value);
 
-        // 3. Create 100 random users
-        $users = User::factory()->count(100)->create();
+        // 3. Create a specific employee user
+        $employee = User::factory()->create([
+            'name' => 'Employee User',
+            'username' => 'employee',
+            'email' => 'employee@example.com',
+            'email_verified_at' => now(),
+        ]);
+        $employee->assignRole(RoleEnum::EMPLOYEE->value);
 
-        // 4. Assign random roles to each user
+        // 4. Create 100 random users and assign random roles
+        $users = User::factory()->count(100)->create();
         $roleNames = collect(RoleEnum::cases())->map(fn($role) => $role->value);
 
         foreach ($users as $user) {
-            $randomRole = $roleNames->random();
-            $user->assignRole($randomRole);
+            $user->assignRole($roleNames->random());
         }
 
         // 5. Create dummy leave applications

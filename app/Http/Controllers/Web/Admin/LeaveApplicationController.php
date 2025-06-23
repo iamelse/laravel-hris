@@ -17,13 +17,22 @@ class LeaveApplicationController extends Controller
         $allowedSortFields = ['start_date', 'end_date', 'created_at', 'updated_at'];
         $limits = [10, 25, 50, 100];
 
-        $leaveApplications = LeaveApplication::with(['user', 'approver'])->search(
+        // Default status to 'pending' if not provided
+        $status = $request->input('status', 'pending');
+
+        // Base query
+        $query = LeaveApplication::with(['user', 'approver'])
+            ->search(
                 keyword: $request->keyword,
                 columns: $allowedFilterFields,
-            )->sort(
+            )
+            ->sort(
                 sort_by: $request->sort_by ?? 'created_at',
                 sort_order: $request->sort_order ?? 'DESC'
-            )->paginate($request->query('limit') ?? 10);
+            )
+            ->where('status', $status);
+
+        $leaveApplications = $query->paginate($request->query('limit') ?? 10);
 
         return view('pages.admin.leave.index', [
             'title' => 'Leave Applications',

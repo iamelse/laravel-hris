@@ -12,7 +12,7 @@ Route::prefix('auth')->group(function () {
 /**
  * Web routes backend
  */
-Route::prefix('admin')->middleware('is.auth')->group(function () {
+Route::prefix('admin')->middleware(['is.auth', 'is.admin'])->group(function () {
     include __DIR__ .'/web/admin/dashboard.php';
 
     include __DIR__ .'/web/admin/leave-application.php';

@@ -95,6 +95,20 @@
                                             </select>
                                         </div>
 
+                                        <!-- Status Filter -->
+                                        <div class="mt-4">
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                Status
+                                            </label>
+                                            <select name="status"
+                                                class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500">
+                                                <option value="">All</option>
+                                                <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
+                                                <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Approved</option>
+                                                <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Rejected</option>
+                                            </select>
+                                        </div>
+
                                         <!-- Sort Field Selection -->
                                         <div class="mt-4">
                                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
