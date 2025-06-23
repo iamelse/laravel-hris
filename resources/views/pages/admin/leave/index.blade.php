@@ -10,10 +10,34 @@
    <div class="p-4 mx-auto max-w-screen-2xl md:p-6">
 
     <!-- Header Section -->
-    <div class="flex px-6 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-white">User Management</h1>
-            <p class="text-gray-600 dark:text-gray-400">Manage user data</p>
+    <div class="px-6 py-4">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <!-- Title -->
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Leaves Management</h1>
+                <p class="text-gray-600 dark:text-gray-400">Manage leave request data</p>
+            </div>
+
+            <!-- Status Counts -->
+            <div class="grid grid-cols-3 gap-4 w-full sm:w-auto">
+                <!-- Pending -->
+                <div class="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
+                    <p class="text-xs font-medium text-yellow-700 dark:text-yellow-300">Pending</p>
+                    <p class="text-lg font-semibold text-yellow-800 dark:text-yellow-100">{{ $statusCounts['pending'] ?? 0 }}</p>
+                </div>
+
+                <!-- Approved -->
+                <div class="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg p-3">
+                    <p class="text-xs font-medium text-green-700 dark:text-green-300">Approved</p>
+                    <p class="text-lg font-semibold text-green-800 dark:text-green-100">{{ $statusCounts['approved'] ?? 0 }}</p>
+                </div>
+
+                <!-- Rejected -->
+                <div class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-3">
+                    <p class="text-xs font-medium text-red-700 dark:text-red-300">Rejected</p>
+                    <p class="text-lg font-semibold text-red-800 dark:text-red-100">{{ $statusCounts['rejected'] ?? 0 }}</p>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -150,6 +174,7 @@
                         <tr class="text-left text-gray-600 dark:text-gray-300 text-sm">
                             <th class="w-20 px-4 py-3 font-medium">No.</th>
                             <th class="px-4 py-3 font-medium">Employee</th>
+                            <th class="px-4 py-3 font-medium">Position</th>
                             <th class="px-4 py-3 font-medium">Leave Period</th>
                             <th class="px-4 py-3 font-medium">Reason</th>
                             <th class="px-4 py-3 font-medium">Status</th>
@@ -161,6 +186,7 @@
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
                                 <td class="w-20 px-4 py-3">{{ $loop->iteration }}</td>
                                 <td class="px-4 py-3">{{ $application->user->name ?? '-' }}</td>
+                                <td class="px-4 py-3">{{ $application->user->job_title ?? '-' }}</td>
                                 <td class="px-4 py-3">{{ $application->formatted_leave_period }}</td>
                                 <td class="px-4 py-3">
                                     <div class="line-clamp-2">{{ $application->reason }}</div>
@@ -175,12 +201,17 @@
                                         {{ ucfirst($application->status) }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-center relative">
+                                
+                                <td class="px-4 py-3 relative">
                                     <div 
-                                        x-data="{ openActionModal: false, actionType: '', openDetailModal: false }" 
+                                        x-data="{
+                                            openActionModal: false,
+                                            actionType: '',
+                                            openDetailModal: false,
+                                            userName: @js($application->user->name)
+                                        }" 
                                         class="inline-flex space-x-1 justify-center"
                                     >
-
                                         <!-- Details Button -->
                                         <button 
                                             @click="openDetailModal = true" 
@@ -192,7 +223,7 @@
 
                                         <!-- Approve Button -->
                                         <button 
-                                            @click="openActionModal = true; actionType = 'approve';" 
+                                            @click="openActionModal = true; actionType = 'approve'" 
                                             :disabled="'{{ $application->status }}' !== 'pending'"
                                             :class="{
                                                 'text-green-600 hover:text-green-800 dark:hover:text-green-400': '{{ $application->status }}' === 'pending',
@@ -205,7 +236,7 @@
 
                                         <!-- Reject Button -->
                                         <button 
-                                            @click="openActionModal = true; actionType = 'reject';" 
+                                            @click="openActionModal = true; actionType = 'reject'" 
                                             :disabled="'{{ $application->status }}' !== 'pending'"
                                             :class="{
                                                 'text-red-600 hover:text-red-800 dark:hover:text-red-400': '{{ $application->status }}' === 'pending',
@@ -225,7 +256,10 @@
                                             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-[400px]">
                                                 <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Confirm Action</h2>
                                                 <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                                                    Are you sure you want to <span x-text="actionType"></span> this leave request?
+                                                    Are you sure you want to 
+                                                    <span class="font-semibold" x-text="actionType"></span> 
+                                                    leave request from 
+                                                    <span class="font-semibold" x-text="userName"></span>?
                                                 </p>
 
                                                 <div class="flex justify-end space-x-3 mt-4">
@@ -323,7 +357,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </td>
 

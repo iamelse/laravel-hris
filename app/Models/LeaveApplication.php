@@ -44,16 +44,16 @@ class LeaveApplication extends Model
                 $formattedDate = $start->format('M j');
                 if ($start->format('M Y') === $end->format('M Y')) {
                     // same month and year
-                    $formattedDate .= '–' . $end->format('j Y');
+                    $formattedDate .= ' – ' . $end->format('j Y');
                 } elseif ($start->year === $end->year) {
                     // same year
-                    $formattedDate .= '–' . $end->format('M j Y');
+                    $formattedDate .= ' – ' . $end->format('M j Y');
                 } else {
                     // different years
-                    $formattedDate .= ' ' . $start->year . '–' . $end->format('M j Y');
+                    $formattedDate .= ' ' . $start->year . ' – ' . $end->format('M j Y');
                 }
 
-                return "{$days} days {$formattedDate}";
+                return "{$days} days, {$formattedDate}";
             }
         );
     }

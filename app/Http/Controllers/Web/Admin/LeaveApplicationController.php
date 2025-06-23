@@ -34,12 +34,19 @@ class LeaveApplicationController extends Controller
 
         $leaveApplications = $query->paginate($request->query('limit') ?? 10);
 
+        $statusCounts = LeaveApplication::select('status')
+                                        ->selectRaw('count(*) as total')
+                                        ->groupBy('status')
+                                        ->pluck('total', 'status')
+                                        ->all();
+
         return view('pages.admin.leave.index', [
             'title' => 'Leave Applications',
             'leaveApplications' => $leaveApplications,
             'allowedFilterFields' => $allowedFilterFields,
             'allowedSortFields' => $allowedSortFields,
             'limits' => $limits,
+            'statusCounts' => $statusCounts
         ]);
     }
 
