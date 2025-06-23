@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Web\BackEnd\UserProfileController;
+use App\Http\Controllers\Web\Admin\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/profile/{user}', [UserProfileController::class, 'edit'])->name('admin.user.profile.edit');
