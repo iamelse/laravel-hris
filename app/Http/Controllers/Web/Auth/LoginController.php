@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web\Auth;
 
+use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\Auth\LoginRequest;
 use Exception;
@@ -30,7 +31,18 @@ class LoginController extends Controller
     
             foreach ($identityFields as $field => $isValid) {
                 if ($isValid && Auth::attempt([$field => $request->identity, 'password' => $request->password], $request->remember)) {
-                    return redirect()->route('be.dashboard.index');
+                    $user = Auth::user();
+
+                    if ($user->hasRole(RoleEnum::ADMIN->value)) {
+                        return redirect()->route('admin.dashboard.index');
+                    }
+
+                    if ($user->hasRole(RoleEnum::EMPLOYEE->value)) {
+                        return redirect()->route('employee.dashboard.index');
+                    }
+
+                    // Default fallback
+                    return redirect()->back()->with('error', 'Oops! Something went wrong.');
                 }
             }
 
@@ -53,6 +65,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('fe.home.index')->with('success', 'You have been logged out.');
+        return redirect()->route('auth.login')->with('success', 'You have been logged out.');
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\Auth\LoginController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/login', [LoginController::class, 'index'])->name('auth.login')->middleware('is.guest');
 Route::post('/login', [LoginController::class, 'login'])->name('auth.do.login')->middleware('is.guest');

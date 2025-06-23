@@ -1,24 +1,20 @@
 <?php
 
-namespace Database\Seeders;
-
 use App\Enums\RoleEnum;
-use App\Models\Role;
+use Spatie\Permission\Models\Role;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\LeaveApplication;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
         // 1. Seed roles from RoleEnum
         foreach (RoleEnum::cases() as $roleEnum) {
             Role::firstOrCreate([
                 'name' => $roleEnum->value,
+                'guard_name' => 'web', // ⬅️ pastikan guard-nya cocok
             ]);
         }
 
@@ -41,5 +37,8 @@ class DatabaseSeeder extends Seeder
             $randomRole = $roleNames->random();
             $user->assignRole($randomRole);
         }
+
+        // 5. Create dummy leave applications
+        LeaveApplication::factory(100)->create();
     }
 }

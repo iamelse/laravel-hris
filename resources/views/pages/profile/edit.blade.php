@@ -15,7 +15,7 @@
         <!-- Form Section -->
         <div class="border-gray-100 p-5 dark:border-gray-800 sm:p-6">
             <div class="rounded-2xl px-6 pb-8 pt-4 border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-                <form action="{{ route('be.user.profile.update', $user->username) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.user.profile.update', $user->username) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     
@@ -153,7 +153,7 @@
         <!-- Form Section -->
         <div class="border-gray-100 p-5 dark:border-gray-800 sm:p-6">
             <div class="rounded-2xl px-6 pb-8 pt-4 border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-                <form action="{{ route('be.user.profile.update.password', $user->username) }}" method="POST">
+                <form action="{{ route('admin.user.profile.update.password', $user->username) }}" method="POST">
                     @csrf
                     @method('PUT')
                     

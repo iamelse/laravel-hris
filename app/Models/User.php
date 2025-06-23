@@ -48,9 +48,14 @@ class User extends Authenticatable
         return 'username';
     }
 
-    public function posts(): HasMany
+    public function leaveApplications(): HasMany
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(LeaveApplication::class);
+    }
+
+    public function approvedLeaveApplications(): HasMany
+    {
+        return $this->hasMany(LeaveApplication::class, 'approved_by');
     }
 
     /**

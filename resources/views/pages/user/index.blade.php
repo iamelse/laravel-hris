@@ -15,7 +15,7 @@
             <h1 class="text-2xl font-bold text-gray-800 dark:text-white">User Management</h1>
             <p class="text-gray-600 dark:text-gray-400">Manage user data</p>
         </div>
-        <a href="{{ route('be.user.create') }}" 
+        <a href="{{ route('admin.user.create') }}" 
             class="flex items-center gap-2 h-[42px] px-4 py-2.5 rounded-lg border border-blue-500 bg-blue-600 text-white font-medium transition-all hover:bg-blue-700 hover:border-blue-600 focus:ring focus:ring-blue-300 dark:bg-blue-700 dark:border-blue-600 dark:hover:bg-blue-800">
             <i class="bx bx-plus text-lg"></i>
             New User
@@ -36,7 +36,7 @@
                                 x-on:click.prevent="
                                     if (selected.length > 0) { 
                                         let params = new URLSearchParams({ usernames: selected.join(',') });
-                                        deleteUrl = '{{ route('be.user.mass.destroy') }}?' + params.toString();
+                                        deleteUrl = '{{ route('admin.user.mass.destroy') }}?' + params.toString();
                                         openUserMassDeleteModal = true;
                                     }
                                 " 
@@ -69,7 +69,7 @@
                         </div>                         
 
                         <!-- Reset Filter Button -->
-                        <a href="{{ route('be.user.index') }}"
+                        <a href="{{ route('admin.user.index') }}"
                             class="flex items-center gap-2 h-[42px] px-4 py-2.5 rounded-lg border border-gray-400 bg-gray-100 text-gray-700 font-medium transition-all hover:bg-gray-200 hover:border-gray-500 focus:ring focus:ring-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700">
                             <i class="bx bx-reset text-lg"></i>
                             Reset Filter
@@ -92,7 +92,7 @@
                                     <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Filter Options</h2>
 
                                     <!-- Form -->
-                                    <form method="GET" action="{{ route('be.user.index') }}">
+                                    <form method="GET" action="{{ route('admin.user.index') }}">
                                         <!-- Role Selection -->
                                         <div class="mt-4">
                                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -242,7 +242,7 @@
                                     <div x-show="openDropDown" @click.outside="openDropDown = false"
                                         class="absolute right-16 top-8 mt-1 w-40 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900 
                                         z-50 overflow-visible">
-                                        <a href="{{ route('be.user.edit', $user->username) }}" class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
+                                        <a href="{{ route('admin.user.edit', $user->username) }}" class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
                                             Edit
                                         </a>
                                         <!-- Alpine.js State Wrapper -->
@@ -268,7 +268,7 @@
                                                         </button>
 
                                                         <!-- Delete Form -->
-                                                        <form action="{{ route('be.user.destroy', $user->username) }}" method="POST">
+                                                        <form action="{{ route('admin.user.destroy', $user->username) }}" method="POST">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">

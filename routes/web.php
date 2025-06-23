@@ -13,11 +13,13 @@ Route::prefix('auth')->group(function () {
  * Web routes backend
  */
 Route::prefix('admin')->middleware('is.auth')->group(function () {
-    include __DIR__ .'/web/backend/dashboard.php';
+    include __DIR__ .'/web/admin/dashboard.php';
 
-    include __DIR__ . '/web/backend/user.php';
+    include __DIR__ .'/web/admin/leave-application.php';
 
-    include __DIR__ . '/web/backend/user-profile.php';
+    include __DIR__ . '/web/admin/user.php';
+
+    include __DIR__ . '/web/admin/user-profile.php';
 });
 
 

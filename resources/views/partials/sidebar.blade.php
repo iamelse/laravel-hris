@@ -8,7 +8,7 @@
          :class="sidebarToggle ? 'justify-center' : 'justify-between'"
          class="flex items-center gap-2 pt-8 sidebar-header pb-7"
       >
-      <a href="{{ route('be.dashboard.index') }}">
+      <a href="{{ route('admin.dashboard.index') }}">
          <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
          <!-- Light mode logo -->
          <div class="flex items-center space-x-2 dark:hidden">
@@ -58,31 +58,43 @@
                      'title' => 'Main',
                      'order' => 1,
                      'children' => [
-                           [
-                              'order' => 1,
-                              'active' => 'be.dashboard',
-                              'route' => 'be.dashboard.index',
-                              'icon' => 'bx-line-chart',
-                              'label' => 'Dashboard',
+                        [
+                           'order' => 1,
+                           'active' => 'admin.dashboard',
+                           'route' => 'admin.dashboard.index',
+                           'icon' => 'bx-line-chart',
+                           'label' => 'Dashboard',
+                        ],
+                        [
+                           'order' => 2,
+                           'active' => [
+                              'admin.leave.index',
+                              'admin.leave.create',
+                              'admin.leave.edit',
+                              'admin.leave.show',
                            ],
+                           'route' => 'admin.leave.index',
+                           'icon' => 'bx bx-calendar',
+                           'label' => 'Leave Management',
+                        ],
                      ]
                   ],
                   [
                      'title' => 'Settings',
                      'order' => 99,
                      'children' => [
-                           [
-                              'order' => 2,
-                              'active' => [
-                                 'be.user.index',
-                                 'be.user.create',
-                                 'be.user.edit'
-                              ],
-                              'exact' => true,
-                              'route' => 'be.user.index',
-                              'icon' => 'bx bx-user',
-                              'label' => 'Users',
+                        [
+                           'order' => 2,
+                           'active' => [
+                              'admin.user.index',
+                              'admin.user.create',
+                              'admin.user.edit'
                            ],
+                           'exact' => true,
+                           'route' => 'admin.user.index',
+                           'icon' => 'bx bx-user',
+                           'label' => 'Users',
+                        ],
                      ]
                   ]
                ]);
