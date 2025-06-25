@@ -58,6 +58,13 @@ class LeaveApplication extends Model
         );
     }
 
+    protected function approverName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->approver?->name
+        );
+    }
+
     /**
      * Get the formmated user's created_at.
      * @return Attribute

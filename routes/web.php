@@ -10,7 +10,7 @@ Route::prefix('auth')->group(function () {
 });
 
 /**
- * Web routes backend
+ * Web routes admin
  */
 Route::prefix('admin')->middleware(['is.auth', 'is.admin'])->group(function () {
     include __DIR__ .'/web/admin/dashboard.php';
@@ -20,6 +20,17 @@ Route::prefix('admin')->middleware(['is.auth', 'is.admin'])->group(function () {
     include __DIR__ . '/web/admin/user.php';
 
     include __DIR__ . '/web/admin/user-profile.php';
+});
+
+/**
+ * Web routes employee
+ */
+Route::prefix('employee')->middleware(['is.auth', 'is.employee'])->group(function () {
+    include __DIR__ .'/web/employee/dashboard.php';
+
+    include __DIR__ .'/web/employee/leave-application.php';
+
+    include __DIR__ . '/web/employee/user-profile.php';
 });
 
 
