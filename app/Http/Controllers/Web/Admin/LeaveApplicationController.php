@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\LeaveApplication;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,40 +14,19 @@ class LeaveApplicationController extends Controller
 {
     public function index(Request $request): View | RedirectResponse
     {
-        $allowedFilterFields = ['reason', 'status'];
-        $allowedSortFields = ['start_date', 'end_date', 'created_at', 'updated_at'];
-        $limits = [10, 25, 50, 100];
+        $query = $this->_buildLeaveApplicationQuery($request);
 
-        // Default status to 'pending' if not provided
-        $status = $request->input('status', 'pending');
+        $leaveApplications = $query->paginate($this->_getPerPageLimit($request));
 
-        // Base query
-        $query = LeaveApplication::with(['user', 'approver'])
-            ->search(
-                keyword: $request->keyword,
-                columns: $allowedFilterFields,
-            )
-            ->sort(
-                sort_by: $request->sort_by ?? 'created_at',
-                sort_order: $request->sort_order ?? 'DESC'
-            )
-            ->where('status', $status);
-
-        $leaveApplications = $query->paginate($request->query('limit') ?? 10);
-
-        $statusCounts = LeaveApplication::select('status')
-                                        ->selectRaw('count(*) as total')
-                                        ->groupBy('status')
-                                        ->pluck('total', 'status')
-                                        ->all();
+        $statusCounts = $this->_getStatusCounts();
 
         return view('pages.admin.leave.index', [
-            'title' => 'Leave Applications',
-            'leaveApplications' => $leaveApplications,
-            'allowedFilterFields' => $allowedFilterFields,
-            'allowedSortFields' => $allowedSortFields,
-            'limits' => $limits,
-            'statusCounts' => $statusCounts
+            'title'               => 'Leave Applications',
+            'leaveApplications'   => $leaveApplications,
+            'allowedFilterFields' => $this->_getAllowedFilterFields(),
+            'allowedSortFields'   => $this->_getAllowedSortFields(),
+            'limits'              => $this->_getLimitOptions(),
+            'statusCounts'        => $statusCounts,
         ]);
     }
 
@@ -72,4 +52,66 @@ class LeaveApplicationController extends Controller
         return back()->with('success', 'Leave application rejected.');
     }
 
+    // ────────────────────────────
+    // PRIVATE METHODS (with _ prefix)
+    // ────────────────────────────
+
+    private function _getAllowedFilterFields(): array
+    {
+        return ['reason'];
+    }
+
+    private function _getAllowedSortFields(): array
+    {
+        return ['start_date', 'end_date', 'created_at', 'updated_at'];
+    }
+
+    private function _getLimitOptions(): array
+    {
+        return [10, 25, 50, 100];
+    }
+
+    private function _getPerPageLimit(Request $request): int
+    {
+        return in_array((int) $request->query('limit'), $this->_getLimitOptions())
+            ? (int) $request->query('limit')
+            : 10;
+    }
+
+    private function _getStatusCounts(): array
+    {
+        return LeaveApplication::select('status')
+            ->selectRaw('count(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status')
+            ->all();
+    }
+
+    private function _buildLeaveApplicationQuery(Request $request): Builder
+    {
+        $query = LeaveApplication::with(['user', 'approver'])
+            ->search(
+                keyword: $request->keyword,
+                columns: $this->_getAllowedFilterFields(),
+            )
+            ->sort(
+                sort_by: $request->sort_by ?? 'created_at',
+                sort_order: $request->sort_order ?? 'DESC',
+            );
+
+        $this->_applyStatusFilter($query, $request);
+
+        return $query;
+    }
+
+    private function _applyStatusFilter(Builder $query, Request $request): void
+    {
+        $statusParam = $request->query('status');
+
+        if (! $request->has('status')) {
+            $query->where('status', 'pending');
+        } elseif ($request->filled('status')) {
+            $query->where('status', $statusParam);
+        }
+    }
 }

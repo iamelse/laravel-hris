@@ -159,6 +159,8 @@
                             <th class="px-4 py-3 font-medium">Leave Period</th>
                             <th class="px-4 py-3 font-medium">Reason</th>
                             <th class="px-4 py-3 font-medium">Status</th>
+                            <th class="px-4 py-3 font-medium">Created At</th>
+                            <th class="px-4 py-3 font-medium">Updated At</th>
                             <th class="px-4 py-3 font-medium text-center">Actions</th>
                         </tr>
                     </thead>
@@ -195,7 +197,8 @@
                                         @endif
                                     </div>
                                 </td>
-                                
+                                <td class="px-4 py-3">{{ $application->formatted_created_at }}</td>
+                                <td class="px-4 py-3">{{ $application->formatted_updated_at }}</td>
                                 <td class="px-4 py-3 text-center relative">
                                     <div 
                                         x-data="{ openDeleteModal: false }" 

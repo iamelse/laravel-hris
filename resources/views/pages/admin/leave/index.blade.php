@@ -201,7 +201,8 @@
                                         {{ ucfirst($application->status) }}
                                     </span>
                                 </td>
-                                
+                                <td class="px-4 py-3">{{ $application->formatted_created_at }}</td>
+                                <td class="px-4 py-3">{{ $application->formatted_updated_at }}</td>
                                 <td class="px-4 py-3 relative">
                                     <div 
                                         x-data="{
