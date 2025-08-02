@@ -4,6 +4,7 @@ use App\Enums\RoleEnum;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
 use App\Models\LeaveApplication;
+use Database\Seeders\ReimbursementSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -46,5 +47,6 @@ class DatabaseSeeder extends Seeder
 
         // 5. Create dummy leave applications
         LeaveApplication::factory(100)->create();
+        $this->call(ReimbursementSeeder::class);
     }
 }

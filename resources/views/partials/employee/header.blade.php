@@ -1,18 +1,18 @@
 <!-- ===== Header Start ===== -->
 <header
    x-data="{menuToggle: false}"
-   class="sticky top-0 z-40 flex w-full border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 lg:border-b"
+   class="sticky top-0 z-40 flex w-full bg-white border-gray-200 dark:border-gray-800 dark:bg-gray-900 lg:border-b"
    >
    <div
-      class="flex flex-grow flex-col items-center justify-between lg:flex-row lg:px-6"
+      class="flex flex-col items-center justify-between flex-grow lg:flex-row lg:px-6"
       >
       <div
-         class="flex w-full items-center justify-between gap-2 border-b border-gray-200 px-3 py-3 dark:border-gray-800 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4"
+         class="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 dark:border-gray-800 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4"
          >
          <!-- Hamburger Toggle BTN -->
          <button
             :class="sidebarToggle ? 'lg:bg-transparent dark:lg:bg-transparent bg-gray-100 dark:bg-gray-800' : ''"
-            class="z-99999 flex h-10 w-10 items-center justify-center rounded-lg border-gray-200 text-gray-500 dark:border-gray-800 dark:text-gray-400 lg:h-11 lg:w-11 lg:border"
+            class="flex items-center justify-center w-10 h-10 text-gray-500 border-gray-200 rounded-lg z-99999 dark:border-gray-800 dark:text-gray-400 lg:h-11 lg:w-11 lg:border"
             @click.stop="sidebarToggle = !sidebarToggle"
             >
             <svg
@@ -69,30 +69,30 @@
              <!-- Light mode logo -->
              <div class="flex items-center space-x-2 dark:hidden">
                      <img
-                         class="h-8 w-auto rounded"
+                         class="w-auto h-8 rounded"
                          src="{{ asset('logo/iamelse-logo-1.png') }}"
                          alt="Logo"
                      />
-                     <span class="ps-1 text-2xl font-bold text-gray-900 dark:text-white">
-                Iamelse
+                     <span class="text-2xl font-bold text-gray-900 ps-1 dark:text-white">
+                HRIS
               </span>
              </div>
 
              <!-- Dark mode logo -->
-             <div class="flex items-center space-x-2 hidden dark:flex">
+             <div class="flex items-center hidden space-x-2 dark:flex">
                  <img
-                     class="h-8 w-auto rounded"
+                     class="w-auto h-8 rounded"
                      src="{{ asset('logo/iamelse-logo-1.png') }}"
                      alt="Logo"
                  />
-              <span class="ps-1 text-2xl font-bold text-gray-900 dark:text-white">
-                Iamelse
+              <span class="text-2xl font-bold text-gray-900 ps-1 dark:text-white">
+                HRIS
               </span>
              </div>
          </a>
          <!-- Application nav menu button -->
          <button
-            class="z-99999 flex h-10 w-10 items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 lg:hidden"
+            class="flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg z-99999 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 lg:hidden"
             :class="menuToggle ? 'bg-gray-100 dark:bg-gray-800' : ''"
             @click.stop="menuToggle = !menuToggle"
             >
@@ -116,12 +116,12 @@
       </div>
       <div
          :class="menuToggle ? 'flex' : 'hidden'"
-         class="w-full items-center justify-between gap-4 px-5 py-4 shadow-theme-md lg:flex lg:justify-end lg:px-0 lg:shadow-none"
+         class="items-center justify-between w-full gap-4 px-5 py-4 shadow-theme-md lg:flex lg:justify-end lg:px-0 lg:shadow-none"
          >
          <div class="flex items-center gap-2 2xsm:gap-3">
             <!-- Dark Mode Toggler -->
             <button
-               class="hover:text-dark-900 relative flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+               class="relative flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-full hover:text-dark-900 h-11 w-11 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
                @click.prevent="darkMode = !darkMode"
                >
                <svg
@@ -167,10 +167,10 @@
                href="#"
                @click.prevent="dropdownOpen = ! dropdownOpen"
                >
-               <span class="mr-3 h-11 w-11 overflow-hidden rounded-full">
+               <span class="mr-3 overflow-hidden rounded-full h-11 w-11">
                <img src="{{ getUserImageProfilePath(Auth::user()) }}" alt="User" />
                </span>
-               <span class="mr-1 block text-theme-sm font-medium">
+               <span class="block mr-1 font-medium text-theme-sm">
                   {{ Auth::user()->name }}
                </span>
                <svg
@@ -198,7 +198,7 @@
                >
                <div>
                   <span
-                     class="block text-theme-sm font-medium text-gray-700 dark:text-gray-400"
+                     class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400"
                      >
                   {{ Auth::user()->name }}
                   </span>
@@ -209,12 +209,12 @@
                   </span>
                </div>
                <ul
-                  class="flex flex-col gap-1 border-b border-gray-200 pb-3 pt-4 dark:border-gray-800"
+                  class="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800"
                   >
                   <li>
                      <a
                         href="{{ route('admin.user.profile.edit', Auth::user()) }}"
-                        class="group flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                        class="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
                         Edit profile
                      </a>
@@ -224,7 +224,7 @@
                   <li x-data>
                      <a href="#"
                         @click.prevent="$refs.logoutForm.submit()"
-                        class="group flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
+                        class="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
                      Sign out
                      </a>
                      <form x-ref="logoutForm" action="{{ route('auth.logout') }}" method="POST" class="hidden">

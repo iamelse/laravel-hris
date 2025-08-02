@@ -58,6 +58,11 @@ class User extends Authenticatable
         return $this->hasMany(LeaveApplication::class, 'approved_by');
     }
 
+    public function reimbursements(): HasMany
+    {
+        return $this->hasMany(Reimbursement::class);
+    }
+
     /**
      * Get the user's role.
      */

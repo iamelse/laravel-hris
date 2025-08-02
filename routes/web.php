@@ -17,6 +17,8 @@ Route::prefix('admin')->middleware(['is.auth', 'is.admin'])->group(function () {
 
     include __DIR__ .'/web/admin/leave-application.php';
 
+    include __DIR__ .'/web/admin/reimbursement.php';
+
     include __DIR__ . '/web/admin/user.php';
 
     include __DIR__ . '/web/admin/user-profile.php';

@@ -13,31 +13,31 @@
          <!-- Light mode logo -->
          <div class="flex items-center space-x-2 dark:hidden">
             <img
-               class="h-10 w-auto rounded"
+               class="w-auto h-10 rounded"
                src="{{ asset('logo/iamelse-logo-1.png') }}"
                alt="Logo"
             />
-            <span class="ps-1 text-3xl font-bold text-gray-900 dark:text-white">
-               Iamelse
+            <span class="text-3xl font-bold text-gray-900 ps-1 dark:text-white">
+               HRIS
             </span>
          </div>
 
          <!-- Dark mode logo -->
-         <div class="flex items-center space-x-2 hidden dark:flex">
+         <div class="flex items-center hidden space-x-2 dark:flex">
             <img
-               class="h-10 w-auto rounded"
+               class="w-auto h-10 rounded"
                src="{{ asset('logo/iamelse-logo-1.png') }}"
                alt="Logo"
             />
-            <span class="ps-1 text-3xl font-bold text-gray-900 dark:text-white">
-               Iamelse
+            <span class="text-3xl font-bold text-gray-900 ps-1 dark:text-white">
+               HRIS
             </span>
          </div>
          </span>
 
          <!-- Logo icon when sidebar is toggled -->
          <img
-            class="logo-icon hidden lg:block rounded h-10 w-10"
+            class="hidden w-10 h-10 rounded logo-icon lg:block"
             :class="{ 'lg:block': sidebarToggle, 'lg:hidden': !sidebarToggle }"
             src="{{ asset('logo/iamelse-logo-1.png') }}"
             alt="Logo"
@@ -75,7 +75,18 @@
                            ],
                            'route' => 'admin.leave.index',
                            'icon' => 'bx bx-calendar',
-                           'label' => 'Leave Management',
+                           'label' => 'Leave',
+                        ],
+                        [
+                           'order' => 3,
+                           'active' => [
+                              'admin.reimbursement.index',
+                              'admin.reimbursement.create',
+                              'admin.reimbursement.edit',
+                           ],
+                           'route' => 'admin.reimbursement.index',
+                           'icon' => 'bx bx-transfer-alt',
+                           'label' => 'Reimbursement',
                         ],
                      ]
                   ],
