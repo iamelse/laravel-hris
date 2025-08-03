@@ -10,16 +10,16 @@
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <!-- Title -->
             <div>
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Leave Management</h1>
-                <p class="text-gray-600 dark:text-gray-400">Manage your leave applications</p>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Reimbursement</h1>
+                <p class="text-gray-600 dark:text-gray-400">Manage your reimbursement submissions</p>
             </div>
 
-            <!-- Apply for Leave Button -->
+            <!-- Submit Reimbursement Button -->
             <a 
-                href="{{ route('employee.leave.create') }}" 
+                href="{{ route('employee.reimbursement.create') }}" 
                 class="inline-flex items-center px-4 py-2 text-sm font-semibold text-white transition bg-blue-600 rounded-lg shadow hover:bg-blue-700"
             >
-                <i class="mr-2 text-lg bx bx-plus"></i> Apply for Leave
+                <i class="mr-2 text-lg bx bx-plus"></i> Submit Reimbursement
             </a>
         </div>
     </div>
@@ -154,8 +154,8 @@
                     <thead class="border-gray-200 border-y dark:border-gray-800 dark:bg-gray-900">
                         <tr class="text-sm text-left text-gray-600 dark:text-gray-300">
                             <th class="w-20 px-4 py-3 font-medium">No.</th>
-                            <th class="px-4 py-3 font-medium">Leave Period</th>
-                            <th class="px-4 py-3 font-medium">Reason</th>
+                            <th class="px-4 py-3 font-medium">Title</th>
+                            <th class="px-4 py-3 font-medium">Amount</th>
                             <th class="px-4 py-3 font-medium">Status</th>
                             <th class="px-4 py-3 font-medium">Created At</th>
                             <th class="px-4 py-3 font-medium">Updated At</th>
@@ -163,108 +163,80 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-800 dark:text-gray-400">
-                        @forelse ($leaveApplications as $application)
+                        @forelse ($reimbursements as $reimburse)
                             <tr class="transition hover:bg-gray-50 dark:hover:bg-gray-800">
                                 <td class="w-20 px-4 py-3">{{ $loop->iteration }}</td>
-                                <td class="px-4 py-3">{{ $application->formatted_leave_period }}</td>
-                                <td class="px-4 py-3">
-                                    <div class="line-clamp-2">{{ $application->reason }}</div>
-                                </td>
+                                <td class="px-4 py-3">{{ $reimburse->title }}</td>
+                                <td class="px-4 py-3">Rp {{ number_format($reimburse->amount, 0, ',', '.') }}</td>
                                 <td class="px-4 py-3">
                                     <div class="flex flex-col space-y-1">
-                                        <!-- Status Badge -->
                                         <span class="inline-block w-fit px-2 py-1 text-xs font-semibold rounded 
-                                            {{ match($application->status) {
+                                            {{ match($reimburse->status) {
                                                 'approved' => 'bg-green-100 text-green-700',
                                                 'rejected' => 'bg-red-100 text-red-700',
                                                 default => 'bg-yellow-100 text-yellow-700'
                                             } }}">
-                                            {{ ucfirst($application->status) }}
+                                            {{ ucfirst($reimburse->status) }}
                                         </span>
 
-                                        <!-- Approver Info -->
-                                        @if ($application->status === 'pending')
+                                        @if ($reimburse->status === 'pending')
                                             <span class="text-xs italic text-yellow-500">Waiting Response</span>
-                                        @elseif ($application->approver_name)
+                                        @elseif ($reimburse->approver_name)
                                             <span class="text-xs text-gray-700 dark:text-gray-300">
-                                                by <span class="font-medium text-gray-900 dark:text-white">{{ $application->approver_name }}</span>
-                                                <span class="text-gray-400 dark:text-gray-500">· {{ $application->updated_at->format('d M Y') }}</span>
+                                                by <span class="font-medium text-gray-900 dark:text-white">{{ $reimburse->approver_name }}</span>
+                                                <span class="text-gray-400 dark:text-gray-500">· {{ $reimburse->updated_at->format('d M Y') }}</span>
                                             </span>
                                         @else
                                             <span class="text-xs italic text-gray-400">No approver</span>
                                         @endif
                                     </div>
                                 </td>
-                                <td class="px-4 py-3">{{ $application->formatted_created_at }}</td>
-                                <td class="px-4 py-3">{{ $application->formatted_updated_at }}</td>
+                                <td class="px-4 py-3">{{ $reimburse->formatted_created_at }}</td>
+                                <td class="px-4 py-3">{{ $reimburse->formatted_updated_at }}</td>
                                 <td class="relative px-4 py-3 text-center">
-                                    <div 
-                                        x-data="{ openDeleteModal: false }" 
-                                        class="inline-flex justify-center space-x-1"
-                                    >
-                                        @if ($application->status === 'pending')
-                                            <!-- Edit Button -->
-                                            <a 
-                                                href="{{ route('employee.leave.edit', $application->id) }}" 
-                                                class="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400" 
-                                                title="Edit"
-                                            >
+                                    <div x-data="{ openDeleteModal: false }" class="inline-flex justify-center space-x-1">
+                                        @if ($reimburse->status === 'pending')
+                                            <!-- Edit -->
+                                            <a href="{{ route('employee.reimbursement.edit', $reimburse->id) }}"
+                                            class="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400"
+                                            title="Edit">
                                                 <i class="bx bx-edit bx-sm"></i>
                                             </a>
 
-                                            <!-- Delete Button -->
-                                            <button 
-                                                @click="openDeleteModal = true" 
-                                                class="text-red-600 hover:text-red-800 dark:hover:text-red-400" 
-                                                title="Delete"
-                                            >
+                                            <!-- Delete -->
+                                            <button @click="openDeleteModal = true"
+                                                    class="text-red-600 hover:text-red-800 dark:hover:text-red-400"
+                                                    title="Delete">
                                                 <i class="bx bx-trash bx-sm"></i>
                                             </button>
                                         @else
-                                            <!-- Disabled Edit Button -->
-                                            <span 
-                                                class="text-gray-400 cursor-not-allowed" 
-                                                title="Cannot edit"
-                                            >
+                                            <span class="text-gray-400 cursor-not-allowed" title="Cannot edit">
                                                 <i class="bx bx-edit bx-sm"></i>
                                             </span>
-
-                                            <!-- Disabled Delete Button -->
-                                            <span 
-                                                class="text-gray-400 cursor-not-allowed" 
-                                                title="Cannot delete"
-                                            >
+                                            <span class="text-gray-400 cursor-not-allowed" title="Cannot delete">
                                                 <i class="bx bx-trash bx-sm"></i>
                                             </span>
                                         @endif
 
-                                        <!-- Delete Confirmation Modal -->
-                                        <div 
-                                            x-show="openDeleteModal" 
-                                            x-cloak 
-                                            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-                                        >
+                                        <!-- Modal -->
+                                        <div x-show="openDeleteModal" x-cloak
+                                            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                                             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-[400px]">
                                                 <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Confirm Delete</h2>
-                                                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                                                    Are you sure you want to delete this leave request?
+                                                <p class="mt-2 text-sm text-gray-600 text-start dark:text-gray-400">
+                                                    Are you sure you want to delete this reimbursement request?
                                                 </p>
 
                                                 <div class="flex justify-end mt-4 space-x-3">
-                                                    <button 
-                                                        @click="openDeleteModal = false" 
-                                                        class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-                                                    >
+                                                    <button @click="openDeleteModal = false"
+                                                            class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
                                                         Cancel
                                                     </button>
-
-                                                    <form method="POST" action="{{ route('employee.leave.destroy', $application->id) }}">
+                                                    <form method="POST" action="{{ route('employee.reimbursement.destroy', $reimburse->id) }}">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button 
-                                                            type="submit" 
-                                                            class="px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700"
-                                                        >
+                                                        <button type="submit"
+                                                                class="px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700">
                                                             Delete
                                                         </button>
                                                     </form>
@@ -273,22 +245,21 @@
                                         </div>
                                     </div>
                                 </td>
-
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="py-4 text-center text-gray-400">No leave applications found.</td>
+                                <td colspan="10" class="py-4 text-center text-gray-400">No reimbursement data found.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>            
                      
-            <div class="{{ !$leaveApplications->previousPageUrl() && !$leaveApplications->nextPageUrl() ? '' : 'border-t border-gray-200 px-6 py-4 dark:border-gray-800' }}">
+            <div class="{{ !$reimbursements->previousPageUrl() && !$reimbursements->nextPageUrl() ? '' : 'border-t border-gray-200 px-6 py-4 dark:border-gray-800' }}">
                 <div class="flex items-center justify-between">
                     <!-- Previous Button -->
-                    @if ($leaveApplications->previousPageUrl())
-                        <a href="{{ $leaveApplications->appends(request()->query())->previousPageUrl() }}" class="flex items-center gap-2 px-4 py-2 text-gray-700 transition bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200">
+                    @if ($reimbursements->previousPageUrl())
+                        <a href="{{ $reimbursements->appends(request()->query())->previousPageUrl() }}" class="flex items-center gap-2 px-4 py-2 text-gray-700 transition bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200">
                             <span class="hidden sm:inline">Previous</span>
                         </a>
                     @else
@@ -297,12 +268,12 @@
             
                     <!-- Pagination Links - Always Centered -->
                     <div class="flex justify-center flex-1">
-                        {{ $leaveApplications->appends(request()->query())->links() }}
+                        {{ $reimbursements->appends(request()->query())->links() }}
                     </div>
             
                     <!-- Next Button -->
-                    @if ($leaveApplications->nextPageUrl())
-                        <a href="{{ $leaveApplications->appends(request()->query())->nextPageUrl() }}" class="flex items-center gap-2 px-4 py-2 text-gray-700 transition bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200">
+                    @if ($reimbursements->nextPageUrl())
+                        <a href="{{ $reimbursements->appends(request()->query())->nextPageUrl() }}" class="flex items-center gap-2 px-4 py-2 text-gray-700 transition bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200">
                             <span class="hidden sm:inline">Next</span>
                         </a>
                     @else

@@ -74,7 +74,18 @@
                            ],
                            'route' => 'employee.leave.index',
                            'icon' => 'bx bx-calendar',
-                           'label' => 'Leave Management',
+                           'label' => 'Leave',
+                        ],
+                        [
+                           'order' => 3,
+                           'active' => [
+                              'employee.reimbursement.index',
+                              'employee.reimbursement.create',
+                              'employee.reimbursement.edit',
+                           ],
+                           'route' => 'employee.reimbursement.index',
+                           'icon' => 'bx bx-transfer-alt',
+                           'label' => 'Reimbursement',
                         ],
                      ]
                   ]

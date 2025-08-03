@@ -32,6 +32,8 @@ Route::prefix('employee')->middleware(['is.auth', 'is.employee'])->group(functio
 
     include __DIR__ .'/web/employee/leave-application.php';
 
+    include __DIR__ .'/web/employee/reimbursement.php';
+
     include __DIR__ . '/web/employee/user-profile.php';
 });
 
